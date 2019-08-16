@@ -1,0 +1,4 @@
+environment.sh
+
+__pycache__/
+*.py[cod]
