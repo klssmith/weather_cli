@@ -4,7 +4,12 @@
 import os
 import sys
 
+from pytz import timezone
+
 from app.datapoint_client.client import DatapointClient
+
+
+local_time = timezone("Europe/London")
 
 
 def run():
@@ -63,6 +68,7 @@ def display_data(data_type, client, site_id):
 
 def print_data(data):
     def format_datetime(dt):
+        dt = dt.astimezone(local_time)
         return dt.strftime("%A %d %b %-I%p")
 
     for date, content in data.items():
