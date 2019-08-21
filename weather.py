@@ -2,7 +2,6 @@
 # coding=utf8
 
 import os
-import pprint
 import sys
 
 from app.datapoint_client.client import DatapointClient
@@ -14,21 +13,16 @@ def run():
 
     data_type, site = sys.argv[1], sys.argv[2]
     client = DatapointClient(os.environ["DATAPOINT_API_KEY"])
-
-    if data_type == "forecast":
-        display_forecast(client, site)
-    elif data_type == "observations":
-        display_observations(client, site)
+    display_data(data_type, client, site)
 
 
 def check_api_key():
     if not os.environ.get("DATAPOINT_API_KEY"):
         print("The DATAPOINT_API_KEY environment variable is not set.")
+        exit()
 
 
 def check_args_are_valid():
-    valid = False
-
     if len(sys.argv) >= 3:
         valid = True
 
@@ -58,14 +52,26 @@ def print_instructions():
     )
 
 
-def display_forecast(client, site_id):
-    forecast = client.get_3hourly_forecasts_for_site(site_id)
-    pprint.pprint(forecast)
+def display_data(data_type, client, site_id):
+    if data_type == "forecast":
+        data = client.get_3hourly_forecasts_for_site(site_id)
+    elif data_type == "observations":
+        data = client.get_obs_for_site(site_id)
+
+    print_data(data)
 
 
-def display_observations(client, site_id):
-    observations = client.get_obs_for_site(site_id)
-    pprint.pprint(observations)
+def print_data(data):
+    def format_datetime(dt):
+        return dt.strftime("%A %d %b %-I%p")
+
+    for date, content in data.items():
+        print(f" ⭐️\t{format_datetime(date)} \t⭐️ ")
+        print("----------------------------------")
+
+        for key, value in content.items():
+            print(f"{key}: {value}")
+        print()
 
 
 if __name__ == "__main__":
