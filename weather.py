@@ -1,8 +1,8 @@
 #!/usr/bin/env python
 # coding=utf8
 
+import argparse
 import os
-import sys
 
 from pytz import timezone
 
@@ -10,51 +10,26 @@ from app.datapoint_client.client import DatapointClient
 
 
 local_time = timezone("Europe/London")
+parser = argparse.ArgumentParser()
+parser.add_argument(
+    "datatype", help="forecast or observation", choices=["forecast", "observations"]
+)
+parser.add_argument("site", help="the ID of the site that the data is for", type=int)
 
 
 def run():
     check_api_key()
-    check_args_are_valid()
 
-    data_type, site = sys.argv[1], sys.argv[2]
+    args = parser.parse_args()
+
     client = DatapointClient(os.environ["DATAPOINT_API_KEY"])
-    display_data(data_type, client, site)
+    display_data(args.datatype, client, args.site)
 
 
 def check_api_key():
     if not os.environ.get("DATAPOINT_API_KEY"):
         print("The DATAPOINT_API_KEY environment variable is not set.")
         exit()
-
-
-def check_args_are_valid():
-    if len(sys.argv) >= 3:
-        valid = True
-
-    if len(sys.argv) < 3:
-        valid = False
-    elif sys.argv[1] not in ("forecast", "observations"):
-        valid = False
-    else:
-        try:
-            int(sys.argv[2])
-        except ValueError:
-            valid = False
-
-    if not valid:
-        print_instructions()
-        exit()
-
-
-def print_instructions():
-    print(
-        """
-        ⚠️ There was something wrong with the arguments you entered ️️️⚠️
-
-        * The first argument must be <forecast> or <observations>
-        * The second argument must be the ID of the site you want the data for
-        """
-    )
 
 
 def display_data(data_type, client, site_id):
