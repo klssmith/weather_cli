@@ -3,6 +3,7 @@
 
 import argparse
 import os
+import sys
 
 from pytz import timezone
 
@@ -12,7 +13,7 @@ from app.datapoint_client.client import DatapointClient
 local_time = timezone("Europe/London")
 parser = argparse.ArgumentParser()
 parser.add_argument(
-    "datatype", help="forecast or observation", choices=["forecast", "observations"]
+    "datatype", help="forecast or observations", choices=["forecast", "observations"]
 )
 parser.add_argument("site", help="the ID of the site that the data is for", type=int)
 
@@ -28,8 +29,8 @@ def run():
 
 def check_api_key():
     if not os.environ.get("DATAPOINT_API_KEY"):
-        print("The DATAPOINT_API_KEY environment variable is not set.")
-        exit()
+        print("The DATAPOINT_API_KEY environment variable is not set.", file=sys.stderr)
+        exit(1)
 
 
 def display_data(data_type, client, site_id):
