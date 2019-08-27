@@ -3,7 +3,7 @@ from datetime import datetime
 
 import pytz
 
-from app.datapoint_client.definitions import (
+from weather_cli.datapoint_client.definitions import (
     FIELD_DESCRIPTORS,
     FORECAST_FIELD_DESCRIPTORS,
 )

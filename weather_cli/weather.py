@@ -7,7 +7,7 @@ import sys
 
 from pytz import timezone
 
-from app.datapoint_client.client import DatapointClient
+from weather_cli.datapoint_client.client import DatapointClient
 
 
 local_time = timezone("Europe/London")
@@ -18,7 +18,7 @@ parser.add_argument(
 parser.add_argument("site", help="the ID of the site that the data is for", type=int)
 
 
-def run():
+def main():
     check_api_key()
 
     args = parser.parse_args()
@@ -57,4 +57,4 @@ def print_data(data):
 
 
 if __name__ == "__main__":
-    run()
+    main()

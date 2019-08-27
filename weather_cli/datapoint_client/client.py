@@ -1,7 +1,7 @@
 import requests
 
-from app.datapoint_client.errors import SiteError
-from app.datapoint_client.formatter import ObsFormatter, WeatherFormatter
+from weather_cli.datapoint_client.errors import SiteError
+from weather_cli.datapoint_client.formatter import ObsFormatter, WeatherFormatter
 
 
 def validate_site(data):
