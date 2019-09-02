@@ -11,17 +11,21 @@ from weather_cli.datapoint_client.client import DatapointClient
 
 
 local_time = timezone("Europe/London")
-parser = argparse.ArgumentParser()
-parser.add_argument(
-    "datatype", help="forecast or observations", choices=["forecast", "observations"]
-)
-parser.add_argument("site", help="the ID of the site that the data is for", type=int)
 
 
-def main():
+def main(argv=None):
     check_api_key()
 
-    args = parser.parse_args()
+    parser = argparse.ArgumentParser()
+    parser.add_argument(
+        "datatype",
+        help="forecast or observations",
+        choices=["forecast", "observations"],
+    )
+    parser.add_argument(
+        "site", help="the ID of the site that the data is for", type=int
+    )
+    args = parser.parse_args(argv)
 
     client = DatapointClient(os.environ["DATAPOINT_API_KEY"])
     display_data(args.datatype, client, args.site)
